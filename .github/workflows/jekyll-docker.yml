@@ -1,0 +1,25 @@
+name: Sync Public Repo with Private Repo
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # Run every 5 minutes
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Sync with Public Repo
+      run: |
+        git remote add public_repo https://github.com/rohail3107/rohail3107.github.io.au
+        git fetch public_repo
+        git pull public_repo master --ff-only
+        git pull public_repo develop --ff-only
+
+    - name: Push changes to Private Repo
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.PAT }}
