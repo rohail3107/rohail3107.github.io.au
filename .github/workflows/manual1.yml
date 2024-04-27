@@ -1,0 +1,25 @@
+name: Sync Public Repo with Private Repo
+
+on:
+  push:
+    branches:
+      - master  # Change this to your master branch name if different
+  schedule:
+    - cron: '*/5 * * * *'  # Run every 5 minutes
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout public repository
+        uses: actions/checkout@v2
+        with:
+          repository: rohail3107/rohail3107.github.io.au  # Specify your public repository here
+      
+      - name: Push changes to private repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          branch: master  # Change this to your master branch name if different
+          force: true  # Use force to overwrite remote changes if needed
